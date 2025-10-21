@@ -12,8 +12,6 @@ workflows:
       node: $NODE_VERSION
       java: $JAVA_VERSION
       xcode: latest
-
-
       android_signing:
         - codemagic_keystore
 
@@ -27,6 +25,19 @@ workflows:
         script: |
           npm install
 
+      - name: Clean & reset Metro cache
+        script: |
+          npm start -- --reset-cache --max-workers 2
+
+      - name: Bundle JS for OTA
+        script: |
+          npx react-native bundle \
+            --platform android \
+            --dev false \
+            --entry-file index.js \
+            --bundle-output android/app/src/main/assets/index.android.bundle \
+            --assets-dest android/app/src/main/res/
+
       - name: Grant Gradle permissions
         script: |
           cd android
@@ -35,6 +46,7 @@ workflows:
       - name: Build Android release
         script: |
           cd android
+          ./gradlew clean
           ./gradlew assembleRelease
 
     artifacts:
