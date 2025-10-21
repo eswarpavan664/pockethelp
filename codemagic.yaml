@@ -10,10 +10,6 @@ workflows:
         JAVA_VERSION: 11
       node: $NODE_VERSION
       java: $JAVA_VERSION
-      groups:
-        - keystore_credentials
-        - google_play
-      npm: true
       xcode: latest
 
     triggering:
@@ -31,20 +27,8 @@ workflows:
           cd android
           ./gradlew assembleRelease
 
-      # (Optional) Build iOS
-      - name: Build iOS release
-        script: |
-          cd ios
-          pod install
-          xcodebuild -workspace YourApp.xcworkspace \
-            -scheme YourApp \
-            -configuration Release \
-            -sdk iphoneos \
-            -archivePath $PWD/build/YourApp.xcarchive archive
-
     artifacts:
       - android/app/build/outputs/**/*.apk
-      - ios/build/**/*.ipa
 
     publishing:
       email:
