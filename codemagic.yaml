@@ -14,7 +14,7 @@ workflows:
       xcode: latest
 
       android_signing:
-        - codemagic.keystore
+        - codemagic_keystore
  
     
     triggering:
