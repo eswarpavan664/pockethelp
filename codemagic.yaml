@@ -1,0 +1,52 @@
+workflows:
+  react_native_build:
+    name: React Native Build
+    max_build_duration: 60
+    instance_type: mac_mini_m1
+
+    environment:
+      vars:
+        NODE_VERSION: 18
+        JAVA_VERSION: 11
+      node: $NODE_VERSION
+      java: $JAVA_VERSION
+      groups:
+        - keystore_credentials
+        - google_play
+      npm: true
+      xcode: latest
+
+    triggering:
+      events:
+        - push
+        - pull_request
+
+    scripts:
+      - name: Install dependencies
+        script: |
+          npm install
+
+      - name: Build Android release
+        script: |
+          cd android
+          ./gradlew assembleRelease
+
+      # (Optional) Build iOS
+      - name: Build iOS release
+        script: |
+          cd ios
+          pod install
+          xcodebuild -workspace YourApp.xcworkspace \
+            -scheme YourApp \
+            -configuration Release \
+            -sdk iphoneos \
+            -archivePath $PWD/build/YourApp.xcarchive archive
+
+    artifacts:
+      - android/app/build/outputs/**/*.apk
+      - ios/build/**/*.ipa
+
+    publishing:
+      email:
+        recipients:
+          - your.email@example.com
