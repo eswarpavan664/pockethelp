@@ -7,11 +7,12 @@ workflows:
     environment:
       vars:
         NODE_VERSION: 18
-        JAVA_VERSION: 11
+        JAVA_VERSION: 17
         PACKAGE_NAME: "com.pockethelp"
       node: $NODE_VERSION
       java: $JAVA_VERSION
       xcode: latest
+
 
       android_signing:
         - codemagic_keystore
