@@ -8,10 +8,15 @@ workflows:
       vars:
         NODE_VERSION: 18
         JAVA_VERSION: 11
+        PACKAGE_NAME: "com.pockethelp"
       node: $NODE_VERSION
       java: $JAVA_VERSION
       xcode: latest
 
+      android_signing:
+        - codemagic.keystore
+ 
+    
     triggering:
       events:
         - push
